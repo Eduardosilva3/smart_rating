@@ -1,0 +1,37 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+  <h1 class="text-5xl font-extrabold mb-10 text-center">Smart Rating</h1>
+  
+  <!-- Container para os botões -->
+  <div class="flex flex-wrap justify-center gap-6 w-full max-w-4xl px-4">
+    <a routerLink="/presentations" *ngIf="canAccessPresentation()">
+      <button class="w-48 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-100 hover:scale-105 hover:shadow-xl transform transition duration-200">
+        Gerenciar Apresentações
+      </button>
+    </a>
+    <a routerLink="/evaluations" *ngIf="canAccessEvaluation()">
+      <button class="w-48 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-100 hover:scale-105 hover:shadow-xl transform transition duration-200">
+        Realizar Avaliações
+      </button>
+    </a>
+    <a routerLink="/results">
+      <button class="w-48 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-100 hover:scale-105 hover:shadow-xl transform transition duration-200">
+        Ver Resultados
+      </button>
+    </a>
+    <a routerLink="/about">
+      <button class="w-48 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-100 hover:scale-105 hover:shadow-xl transform transition duration-200">
+        Sobre a Equipe
+      </button>
+    </a>
+  </div>
+
+  <!-- Botão de Logout -->
+  <div class="mt-8">
+    <button
+      (click)="logout()"
+      class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
+    >
+      Sair
+    </button>
+  </div>
+</div>

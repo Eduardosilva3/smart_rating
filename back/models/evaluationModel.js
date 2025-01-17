@@ -1,9 +1,9 @@
-const Redis = require('ioredis');
+const Redis = require("ioredis");
 const redis = new Redis();
 
 const presentationModel = require("./presentationModel");
 
-const EVALUATIONS_KEY = 'evaluations';
+const EVALUATIONS_KEY = "evaluations";
 
 // Função para carregar avaliações do Redis
 const loadEvaluations = async () => {
@@ -11,7 +11,7 @@ const loadEvaluations = async () => {
     const data = await redis.get(EVALUATIONS_KEY);
     return data ? JSON.parse(data) : [];
   } catch (err) {
-    console.error('Erro ao carregar as avaliações do Redis:', err);
+    console.error("Erro ao carregar as avaliações do Redis:", err);
     return [];
   }
 };
@@ -21,7 +21,7 @@ const saveEvaluations = async (evaluations) => {
   try {
     await redis.set(EVALUATIONS_KEY, JSON.stringify(evaluations));
   } catch (err) {
-    console.error('Erro ao salvar as avaliações no Redis:', err);
+    console.error("Erro ao salvar as avaliações no Redis:", err);
   }
 };
 
@@ -36,7 +36,7 @@ module.exports = {
   // Obtém todas as avaliações
   getAllEvaluations: () => evaluations,
 
-  // Obtém avaliações de uma apresentação específica, incluindo nomes de critérios
+  // Obtém avaliações de uma apresentação específica, incluindo nomes de critérios e avaliadores
   getEvaluationsByPresentation: (presentationId) => {
     // Busca a apresentação pelo ID
     const presentation = presentationModel
@@ -55,6 +55,7 @@ module.exports = {
         return {
           ...evaluation,
           criterionName: criterion ? criterion.name : "Critério Desconhecido",
+          evaluatorName: evaluation.evaluatorName || "Avaliador Desconhecido", // Adiciona o nome do avaliador
         };
       });
   },

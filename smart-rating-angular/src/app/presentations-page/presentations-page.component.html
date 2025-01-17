@@ -1,0 +1,94 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 text-white px-4 py-8">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-xl">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">
+      {{ editingPresentation ? 'Editar Apresentação' : 'Nova Apresentação' }}
+    </h2>
+    <form (ngSubmit)="handleSubmit()" class="space-y-6">
+      <div>
+        <label class="text-gray-700 font-medium">Título da Apresentação</label>
+        <input
+          [(ngModel)]="title"
+          name="title"
+          class="border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mt-2 w-full rounded-lg p-2 text-black"
+          required
+        />
+      </div>
+      <div>
+        <label class="text-gray-700 font-medium">Apresentador</label>
+        <input
+          [(ngModel)]="presenter"
+          name="presenter"
+          class="border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mt-2 w-full rounded-lg p-2 text-black"
+          required
+        />
+      </div>
+      <div *ngFor="let criterion of criteria; let i = index" class="flex space-x-4 items-end">
+        <div class="flex-grow">
+          <label class="text-gray-700 font-medium">Critério</label>
+          <input
+            [(ngModel)]="criteria[i].name"
+            name="criterion-{{ i }}"
+            class="border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mt-2 w-full rounded-lg p-2 text-black"
+            required
+          />
+        </div>
+        <div>
+          <label class="text-gray-700 font-medium">Peso</label>
+          <input
+            type="number"
+            [(ngModel)]="criteria[i].weight"
+            name="weight-{{ i }}"
+            min="1"
+            max="10"
+            class="border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mt-2 w-20 rounded-lg p-2 text-black"
+            required
+          />
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 shadow-md"
+      >
+        {{ editingPresentation ? 'Salvar Alterações' : 'Cadastrar Apresentação' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="max-w-4xl mx-auto bg-white mt-10 p-6 rounded-lg shadow-xl">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Lista de Apresentações</h2>
+    <ul class="space-y-4">
+      <li
+        *ngFor="let presentation of presentations"
+        class="p-4 rounded-lg bg-gray-100 shadow-md flex justify-between items-center"
+      >
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">{{ presentation.title }}</h3>
+          <p class="text-sm text-gray-600">Apresentador: {{ presentation.presenter }}</p>
+        </div>
+        <div class="flex space-x-4">
+          <button
+            (click)="handleEdit(presentation)"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md"
+          >
+            Editar
+          </button>
+          <button
+            (click)="handleDelete(presentation.id)"
+            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md"
+          >
+            Excluir
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="max-w-4xl mx-auto text-center mt-10">
+    <a
+      routerLink="/"
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 shadow-md"
+    >
+      Voltar para Home
+    </a>
+  </div>
+</div>

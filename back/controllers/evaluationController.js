@@ -1,16 +1,17 @@
 const evaluationModel = require("../models/evaluationModel");
 
 exports.createEvaluation = (req, res) => {
-  const { presentationId, criterionId, score } = req.body;
+  const { presentationId, criterionId, score, evaluatorName } = req.body;
 
-  if (!presentationId || !criterionId || score === undefined) {
-    return res
-      .status(400)
-      .json({ message: "Dados incompletos. Envie presentationId, criterionId e score." });
+  if (!presentationId || !criterionId || score === undefined || !evaluatorName) {
+    return res.status(400).json({
+      message:
+        "Dados incompletos. Envie presentationId, criterionId, score e evaluatorName.",
+    });
   }
 
   // Adiciona a avaliação individual ao modelo
-  evaluationModel.addEvaluation({ presentationId, criterionId, score });
+  evaluationModel.addEvaluation({ presentationId, criterionId, score, evaluatorName });
 
   res.status(201).json({ message: "Avaliação registrada com sucesso" });
 };
