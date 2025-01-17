@@ -23,7 +23,6 @@ export class PresentationsPageComponent implements OnInit {
   presentations: Presentation[] = [];
   editingPresentation: Presentation | null = null;
 
-  // Form Fields
   title: string = '';
   presenter: string = '';
   criteria: Criterion[] = [{ id: this.generateId(), name: '', weight: 1 }];
@@ -40,7 +39,6 @@ export class PresentationsPageComponent implements OnInit {
     return Math.random().toString(36).substr(2, 9);
   }
 
-  // Load all presentations
   loadPresentations(): void {
     this.http.get<Presentation[]>(this.baseUrl).subscribe({
       next: (data) => (this.presentations = data),
@@ -48,10 +46,8 @@ export class PresentationsPageComponent implements OnInit {
     });
   }
 
-  // Add or Edit Presentation
   handleSubmit(): void {
     if (this.editingPresentation) {
-      // Edit existing presentation
       const updatedPresentation: Presentation = {
         ...this.editingPresentation,
         title: this.title,
@@ -69,7 +65,6 @@ export class PresentationsPageComponent implements OnInit {
         error: (err) => console.error('Erro ao editar apresentação:', err),
       });
     } else {
-      // Add new presentation
       const newPresentation: Omit<Presentation, 'id'> = {
         title: this.title,
         presenter: this.presenter,
@@ -86,7 +81,6 @@ export class PresentationsPageComponent implements OnInit {
     }
   }
 
-  // Reset form
   resetForm(): void {
     this.title = '';
     this.presenter = '';
@@ -94,12 +88,10 @@ export class PresentationsPageComponent implements OnInit {
     this.editingPresentation = null;
   }
 
-  // Add a new criterion
   addCriteria(): void {
     this.criteria.push({ id: this.generateId(), name: '', weight: 1 });
   }
 
-  // Update a specific criterion
   updateCriteria(index: number, field: keyof Criterion, value: string | number): void {
     this.criteria[index] = {
       ...this.criteria[index],
@@ -107,7 +99,6 @@ export class PresentationsPageComponent implements OnInit {
     };
   }
 
-  // Edit a presentation
   handleEdit(presentation: Presentation): void {
     this.editingPresentation = presentation;
     this.title = presentation.title;
@@ -115,7 +106,6 @@ export class PresentationsPageComponent implements OnInit {
     this.criteria = [...presentation.criteria];
   }
 
-  // Delete a presentation
   handleDelete(id: string): void {
     this.http.delete(`${this.baseUrl}/${id}`).subscribe({
       next: () => {

@@ -19,7 +19,7 @@ interface Evaluation {
   presentationId: string;
   criterionId: string;
   score: number;
-  evaluatorName: string; // Novo campo
+  evaluatorName: string; 
   criterionName?: string;
 }
 
@@ -32,7 +32,7 @@ export class EvaluationsPageComponent implements OnInit {
   presentations: Presentation[] = [];
   selectedEvaluations: Record<string, Evaluation[]> = {};
   scores: Record<string, number> = {};
-  evaluatorName: string = ''; // Nome do usuário do token
+  evaluatorName: string = ''; 
 
   private baseUrl = 'http://localhost:5000/api';
 
@@ -43,14 +43,12 @@ export class EvaluationsPageComponent implements OnInit {
     this.loadPresentations();
   }
 
-  // Extrair o nome do avaliador do token
   private async extractEvaluatorName(): Promise<void> {
     const token = await this.keycloakService.getToken();
     const decodedToken = this.decodeToken(token);
     this.evaluatorName = decodedToken?.name || 'Desconhecido';
   }
 
-  // Decodificar o token
   private decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
@@ -62,7 +60,6 @@ export class EvaluationsPageComponent implements OnInit {
     }
   }
 
-  // Carregar apresentações
   loadPresentations(): void {
     this.http.get<Presentation[]>(`${this.baseUrl}/presentations`).subscribe({
       next: (data) => (this.presentations = data),
@@ -70,7 +67,6 @@ export class EvaluationsPageComponent implements OnInit {
     });
   }
 
-  // Buscar avaliações de uma apresentação
   fetchEvaluations(presentationId: string): void {
     this.http.get<Evaluation[]>(`${this.baseUrl}/evaluations/${presentationId}`).subscribe({
       next: (data) => {
@@ -84,28 +80,26 @@ export class EvaluationsPageComponent implements OnInit {
     });
   }
 
-  // Submeter uma avaliação
   handleSubmit(presentation: Presentation): void {
     Object.entries(this.scores).forEach(([criterionId, score]) => {
       const evaluation: Evaluation = {
         presentationId: presentation.id,
         criterionId,
         score,
-        evaluatorName: this.evaluatorName, // Adiciona o nome do avaliador
+        evaluatorName: this.evaluatorName, 
       };
 
       this.http.post<void>(`${this.baseUrl}/evaluations`, evaluation).subscribe({
         next: () => {
-          this.fetchEvaluations(presentation.id); // Atualizar avaliações
+          this.fetchEvaluations(presentation.id); 
         },
         error: (err) => console.error('Erro ao registrar avaliação:', err),
       });
     });
 
-    this.scores = {}; // Limpar as notas após envio
+    this.scores = {}; 
   }
 
-  // Atualizar a nota para um critério
   updateScore(criterionId: string, score: number): void {
     this.scores = {
       ...this.scores,

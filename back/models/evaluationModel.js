@@ -5,7 +5,6 @@ const presentationModel = require("./presentationModel");
 
 const EVALUATIONS_KEY = "evaluations";
 
-// Função para carregar avaliações do Redis
 const loadEvaluations = async () => {
   try {
     const data = await redis.get(EVALUATIONS_KEY);
@@ -16,7 +15,6 @@ const loadEvaluations = async () => {
   }
 };
 
-// Função para salvar avaliações no Redis
 const saveEvaluations = async (evaluations) => {
   try {
     await redis.set(EVALUATIONS_KEY, JSON.stringify(evaluations));
@@ -25,7 +23,6 @@ const saveEvaluations = async (evaluations) => {
   }
 };
 
-// Variável evaluations será carregada do Redis ao inicializar
 let evaluations = [];
 
 loadEvaluations().then((data) => {
@@ -33,34 +30,29 @@ loadEvaluations().then((data) => {
 });
 
 module.exports = {
-  // Obtém todas as avaliações
   getAllEvaluations: () => evaluations,
 
-  // Obtém avaliações de uma apresentação específica, incluindo nomes de critérios e avaliadores
   getEvaluationsByPresentation: (presentationId) => {
-    // Busca a apresentação pelo ID
     const presentation = presentationModel
       .getPresentations()
       .find((p) => p.id === presentationId);
 
-    if (!presentation) return []; // Retorna vazio se a apresentação não existir
+    if (!presentation) return []; 
 
     return evaluations
       .filter((e) => e.presentationId === presentationId)
       .map((evaluation) => {
-        // Busca o nome do critério correspondente
         const criterion = presentation.criteria.find(
           (c) => c.id === evaluation.criterionId
         );
         return {
           ...evaluation,
           criterionName: criterion ? criterion.name : "Critério Desconhecido",
-          evaluatorName: evaluation.evaluatorName || "Avaliador Desconhecido", // Adiciona o nome do avaliador
+          evaluatorName: evaluation.evaluatorName || "Avaliador Desconhecido",
         };
       });
   },
 
-  // Adiciona uma nova avaliação
   addEvaluation: async (evaluation) => {
     evaluations.push(evaluation);
     await saveEvaluations(evaluations);

@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 
-// Interface dos resultados
 interface Result {
   id: string;
   title: string;
@@ -19,17 +18,14 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   private socket!: Socket;
 
   ngOnInit(): void {
-    // Conecta ao WebSocket do servidor
     this.socket = io('http://localhost:5000');
 
-    // Escuta os eventos "results" do servidor
     this.socket.on('results', (data: Result[]) => {
       this.results = data;
     });
   }
 
   ngOnDestroy(): void {
-    // Desconecta ao destruir o componente
     if (this.socket) {
       this.socket.disconnect();
     }

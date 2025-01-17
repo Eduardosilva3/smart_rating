@@ -10,7 +10,6 @@ exports.createEvaluation = (req, res) => {
     });
   }
 
-  // Adiciona a avaliação individual ao modelo
   evaluationModel.addEvaluation({ presentationId, criterionId, score, evaluatorName });
 
   res.status(201).json({ message: "Avaliação registrada com sucesso" });
