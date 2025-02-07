@@ -43,10 +43,12 @@ const calculateAverageScores = () => {
       id: presentation.id,
       title: presentation.title,
       presenter: presentation.presenter,
-      averageScore: parseFloat(averageScore.toFixed(2)), // Limita a 2 casas decimais
+      averageScore: parseFloat(averageScore.toFixed(2)),
+      totalDonations: presentation.totalDonations || 0,  // Incluímos totalDonations
     };
   });
 };
+
 
 // WebSocket para atualizações em tempo real
 io.on("connection", (socket) => {

@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 
@@ -6,6 +7,7 @@ interface Result {
   title: string;
   presenter: string;
   averageScore: number;
+  totalDonations: number;
 }
 
 @Component({
@@ -15,7 +17,13 @@ interface Result {
 })
 export class ResultsPageComponent implements OnInit, OnDestroy {
   results: Result[] = [];
+  showDonationModal: boolean = false;
+  selectedResultId: string = '';
+  totalDonationsForSelected: number = 0;
   private socket!: Socket;
+  private readonly backendUrl = 'http://localhost:5000/api/presentations';
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.socket = io('http://localhost:5000');
@@ -24,6 +32,34 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
       this.results = data;
     });
   }
+
+  openDonationModal(result: Result): void {
+    this.selectedResultId = result.id;
+    this.totalDonationsForSelected = result.totalDonations;
+    this.showDonationModal = true;
+  }
+
+  closeDonationModal(): void {
+    this.showDonationModal = false;
+  }
+
+  updateTotalDonations(donationAmount: number): void {
+    this.http.post<Result>(`${this.backendUrl}/${this.selectedResultId}/donation`, { amount: donationAmount })
+      .subscribe(
+        (updatedResult) => {
+          // Atualiza o resultado na lista
+          const result = this.results.find(r => r.id === this.selectedResultId);
+          if (result) {
+            result.totalDonations = updatedResult.totalDonations;
+          }
+          this.closeDonationModal();
+        },
+        (error) => {
+          console.error('Erro ao atualizar a doação:', error);
+        }
+      );
+  }
+  
 
   ngOnDestroy(): void {
     if (this.socket) {

@@ -24,3 +24,19 @@ exports.deletePresentation = (req, res) => {
   model.deletePresentation(id);
   res.json({ message: "Apresentação deletada com sucesso" });
 };
+
+exports.addDonation = async (req, res) => {
+  const { id } = req.params;
+  const { amount } = req.body;
+
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ message: "O valor da doação deve ser maior que zero." });
+  }
+
+  const updatedPresentation = await model.addDonation(id, amount);
+  if (updatedPresentation) {
+    res.json(updatedPresentation);
+  } else {
+    res.status(404).json({ message: "Apresentação não encontrada." });
+  }
+};

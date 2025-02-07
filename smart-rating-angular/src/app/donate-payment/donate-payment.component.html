@@ -1,0 +1,35 @@
+<div class="donation-container">
+    <!-- Título da tela -->
+    <h2 class="donation-title">Faça sua Doação</h2>
+    
+    <!-- Campo para o usuário inserir o valor da doação -->
+    <div class="donation-input-container">
+      <label for="donationAmount">Valor da Doação:</label>
+      <input
+        type="number"
+        id="donationAmount"
+        [(ngModel)]="donationAmount"
+        placeholder="Digite o valor"
+        class="donation-input"
+        min="1"
+      />
+    </div>
+  
+    <!-- Exibição do valor total já doado -->
+    <div class="total-donated">
+      Total já doado: <span class="amount">{{ totalDonated | currency: 'BRL' }}</span>
+    </div>
+  
+    <!-- Botão para iniciar o pagamento -->
+    <button
+      class="donation-button"
+      (click)="initializePayment()"
+      [disabled]="!donationAmount || donationAmount <= 0"
+    >
+      Realizar Doação
+    </button>
+  
+    <!-- Contêiner para o Payment Brick -->
+    <div id="paymentBrick_container" *ngIf="paymentInitialized"></div>
+  </div>
+  

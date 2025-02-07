@@ -11,6 +11,7 @@ import { EvaluationsPageComponent } from './evaluations-page/evaluations-page.co
 import { ResultsPageComponent } from './results-page/results-page.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { DonatePaymentComponent } from './donate-payment/donate-payment.component';
 
 
 
@@ -40,6 +41,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
     EvaluationsPageComponent,
     ResultsPageComponent,
     AboutPageComponent,
+    DonatePaymentComponent,
   ],
   imports: [
     BrowserModule,

@@ -30,11 +30,13 @@ loadPresentations().then((data) => {
   presentations = data;
 });
 
+// Atualize o modelo em 'presentationModel.js'
+
 module.exports = {
   getPresentations: () => presentations,
 
   addPresentation: async (presentation) => {
-    presentations.push(presentation);
+    presentations.push({ ...presentation, totalDonations: 0 });  // Novo campo
     await savePresentations(presentations);
   },
 
@@ -49,4 +51,15 @@ module.exports = {
     presentations = presentations.filter((p) => p.id !== id);
     await savePresentations(presentations);
   },
+
+  addDonation: async (id, amount) => {
+    const presentation = presentations.find((p) => p.id === id);
+    if (presentation) {
+      presentation.totalDonations = (presentation.totalDonations || 0) + amount;
+      await savePresentations(presentations);
+      return presentation;
+    }
+    return null;
+  },
 };
+

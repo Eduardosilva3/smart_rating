@@ -1,36 +1,57 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 text-white flex flex-col items-center px-4 py-8">
-    <h1 class="text-4xl font-bold mb-10 text-center">Resultados em Tempo Real</h1>
-  
-    <!-- Exibe mensagem se não houver resultados -->
-    <div *ngIf="results.length === 0" class="text-lg text-gray-100 bg-gray-800 p-4 rounded-lg shadow-md">
-      Nenhum resultado disponível no momento.
-    </div>
-  
-    <!-- Exibe os resultados -->
-    <ul
-      *ngIf="results.length > 0"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl"
+  <h1 class="text-4xl font-bold mb-10 text-center">Resultados em Tempo Real</h1>
+
+  <!-- Exibe mensagem se não houver resultados -->
+  <div *ngIf="results.length === 0" class="text-lg text-gray-100 bg-gray-800 p-4 rounded-lg shadow-md">
+    Nenhum resultado disponível no momento.
+  </div>
+
+  <!-- Exibe os resultados -->
+  <ul *ngIf="results.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+    <li
+      *ngFor="let result of results"
+      class="p-6 bg-white text-gray-800 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl"
     >
-      <li
-        *ngFor="let result of results"
-        class="p-6 bg-white text-gray-800 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl"
+      <h3 class="text-2xl font-semibold mb-2">{{ result.title }}</h3>
+      <p class="text-lg text-gray-600 mb-4">
+        <span class="font-semibold">Apresentador:</span> {{ result.presenter }}
+      </p>
+      <p class="text-xl font-bold text-blue-500 mb-4">Nota Média: {{ result.averageScore.toFixed(2) }}</p>
+
+      <!-- Valor total já doado -->
+      <p class="text-lg text-green-500 mb-4">Total Doado: {{ result.totalDonations | currency: 'BRL' }}</p>
+
+      <!-- Botão de doação -->
+      <button
+        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105"
+        (click)="openDonationModal(result)"
       >
-        <h3 class="text-2xl font-semibold mb-2">{{ result.title }}</h3>
-        <p class="text-lg text-gray-600 mb-4">
-          <span class="font-semibold">Apresentador:</span> {{ result.presenter }}
-        </p>
-        <p class="text-xl font-bold text-blue-500">Nota Média: {{ result.averageScore.toFixed(2) }}</p>
-      </li>
-    </ul>
-  
-    <!-- Botão Voltar para Home -->
-    <div class="mt-12">
-      <a
-        routerLink="/"
-        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
-      >
-        Voltar para Home
-      </a>
+        Fazer Doação
+      </button>
+    </li>
+  </ul>
+
+  <!-- Modal de doação -->
+  <div *ngIf="showDonationModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-button" (click)="closeDonationModal()">X</button>
+
+      <!-- Componente de doação -->
+      <app-donate-payment
+        [totalDonated]="totalDonationsForSelected"
+        [idPresentation]="selectedResultId"
+        (paymentCompleted)="updateTotalDonations($event)"
+      ></app-donate-payment>
     </div>
   </div>
-  
+
+  <!-- Botão Voltar para Home -->
+  <div class="mt-12">
+    <a
+      routerLink="/"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
+    >
+      Voltar para Home
+    </a>
+  </div>
+</div>
